@@ -1,6 +1,5 @@
 package hello.login.web.session;
 
-
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
@@ -14,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 세션 관리
  */
-
 @Component
 public class SessionManager {
 
@@ -23,9 +21,6 @@ public class SessionManager {
 
     /**
      * 세션 생성
-     * * sessionId 생성 (임의의 추정 불가능한 랜덤 값)
-     * * 세션 저장소에 sessionId와 보관할 값 저장
-     * * sessionId로 응답 쿠키를 생성해서 클라이언트에 전달
      */
     public void createSession(Object value, HttpServletResponse response) {
 
@@ -59,6 +54,7 @@ public class SessionManager {
         }
     }
 
+
     public Cookie findCookie(HttpServletRequest request, String cookieName) {
         if (request.getCookies() == null) {
             return null;
@@ -68,4 +64,5 @@ public class SessionManager {
                 .findAny()
                 .orElse(null);
     }
+
 }

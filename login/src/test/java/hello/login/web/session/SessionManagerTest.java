@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import javax.servlet.http.HttpServletResponse;
+
 import static org.assertj.core.api.Assertions.*;
 
 class SessionManagerTest {
@@ -34,5 +36,4 @@ class SessionManagerTest {
         assertThat(expired).isNull();
 
     }
-
 }

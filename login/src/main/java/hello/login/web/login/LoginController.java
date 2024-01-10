@@ -25,7 +25,7 @@ import javax.validation.Valid;
 public class LoginController {
 
     private final LoginService loginService;
-    private final SessionManager sessionmanager;
+    private final SessionManager sessionManager;
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
@@ -46,9 +46,12 @@ public class LoginController {
         }
 
         //로그인 성공 처리
+
+        //쿠키에 시간 정보를 주지 않으면 세션 쿠기(브라우저 종료시 모두 종료)
         Cookie idCookie = new Cookie("memberId", String.valueOf(loginMember.getId()));
         response.addCookie(idCookie);
         return "redirect:/";
+
     }
 
 //    @PostMapping("/login")
@@ -66,9 +69,11 @@ public class LoginController {
 
         //로그인 성공 처리
 
-        sessionmanager.createSession(loginMember, response);
+        //세션 관리자를 통해 세션을 생성하고, 회원 데이터 보관
+        sessionManager.createSession(loginMember, response);
 
         return "redirect:/";
+
     }
 
 //    @PostMapping("/login")
@@ -85,13 +90,15 @@ public class LoginController {
         }
 
         //로그인 성공 처리
+        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
+        //세션에 로그인 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-//        sessionmanager.createSession(loginMember, response);
-
         return "redirect:/";
+
     }
+
 
     @PostMapping("/login")
     public String loginV4(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
@@ -110,12 +117,13 @@ public class LoginController {
         }
 
         //로그인 성공 처리
+        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
+        //세션에 로그인 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-//        sessionmanager.createSession(loginMember, response);
-
         return "redirect:" + redirectURL;
+
     }
 
 //    @PostMapping("/logout")
@@ -126,7 +134,7 @@ public class LoginController {
 
 //    @PostMapping("/logout")
     public String logoutV2(HttpServletRequest request) {
-        sessionmanager.expire(request);
+        sessionManager.expire(request);
         return "redirect:/";
     }
 
@@ -138,8 +146,6 @@ public class LoginController {
         }
         return "redirect:/";
     }
-
-
 
     private void expireCookie(HttpServletResponse response, String cookieName) {
         Cookie cookie = new Cookie(cookieName, null);
